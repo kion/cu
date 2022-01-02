@@ -1,9 +1,12 @@
+# cu
+
 A simple, fast and accurate unit conversion utility.
+
 Written in Rust, with minimal dependencies.
 
 ![demo](assets/cu-demo.gif)
 
-Usage
+### Usage
 
 ```
 <sv> <su> =|to <tu> [:<dp>]
@@ -18,7 +21,7 @@ Use one of the following parameters to get the usage output from the app itself:
 
 `--help, -help, -h, help`
 
-Supported units
+### Supported units
 
 ```
 -------------------------------------------
@@ -162,6 +165,8 @@ Supported units
 Use one of the following parameters to get the supported units output from the app itself:
 
 `--help units, -help units, -hu, help units`
+
+### Version
 
 Use one of the following parameters to check the app version:
 
