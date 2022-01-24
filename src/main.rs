@@ -73,7 +73,7 @@ fn main() {
             let mut precision = Some(DEFAULT_PRECISION);
             let left_right: Vec<String> = input.split(sep.unwrap()).map(|s| s.trim().to_string()).collect();
             if left_right.len() == 2 {
-                let left_regex = Regex::new(r"([\d/.]+)(.*)").unwrap();
+                let left_regex = Regex::new(r"(-?[\d/.]+)(.*)").unwrap();
                 let left_captures_opt = left_regex.captures(&left_right[0]);
                 if left_captures_opt.is_some() {
                     let left_captures = left_captures_opt.unwrap();
