@@ -739,7 +739,7 @@ lazy_static! {
             Unit {
                 name: "Fluid Ounce • Imperial / US",
                 abbr: "fl oz",
-                aliases: &["fluid ounce", "fluid ounces"],
+                aliases: &["floz", "fluid ounce", "fluid ounces", "oz", "ounce", "ounces"],
                 ratios: Some(vec![
                     ("Imperial", 2.8413e-5),
                     ("US", 2.9574e-5)
