@@ -9,7 +9,7 @@ Written in Rust, with minimal dependencies.
 ### Usage
 
 ```
-<sv> <su> =|to <tu> [:<dp>]
+<sv> <su> [<sv2> <su2> ...] =|to <tu> [:<dp>]
 ```
 
 * `<sv>` _(required)_ - the value to convert
