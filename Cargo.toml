@@ -8,8 +8,3 @@ repository = "https://github.com/kion/cu"
 lazy_static = "1.4.0"
 regex = "1.5.4"
 indexmap = "2.9.0"
-
-# The profile that 'dist' will build with
-[profile.dist]
-inherits = "release"
-lto = "thin"
