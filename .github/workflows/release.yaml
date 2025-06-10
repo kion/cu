@@ -22,10 +22,6 @@ jobs:
             os: macos-latest
             target: x86_64-apple-darwin
 
-          - build: windows-gnu
-            os: windows-latest
-            target: x86_64-pc-windows-gnu
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -50,10 +46,7 @@ jobs:
         shell: bash
         run: |
           binary_name="cu"
-          if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            mv "target/${{ matrix.target }}/release/$binary_name.exe" "target/${{ matrix.target }}/release/$binary_name-windows.exe"
-            echo "ASSET=target/${{ matrix.target }}/release/$binary_name-windows.exe" >> $GITHUB_ENV
-          elif [ "${{ matrix.os }}" = "macos-latest" ]; then
+          if [ "${{ matrix.os }}" = "macos-latest" ]; then
             mv "target/${{ matrix.target }}/release/$binary_name" "target/${{ matrix.target }}/release/$binary_name-macos"
             echo "ASSET=target/${{ matrix.target }}/release/$binary_name-macos" >> $GITHUB_ENV
           else
