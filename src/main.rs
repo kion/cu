@@ -11,7 +11,7 @@ use units::{DEFAULT_PRECISION, MAX_PRECISION, UNITS};
 use utils::{find_unit, format_number, parse_value_unit};
 
 fn version() {
-    println!("cu 1.1.0");
+    println!("cu 1.1.1");
 }
 
 fn usage() {
@@ -108,7 +108,7 @@ fn main() {
 
                 let t_unit_type;
                 let t_unit;
-                if let Some((found_unit_type, unit)) = find_unit(&t_unit_str) {
+                if let Some((found_unit_type, unit)) = find_unit(&t_unit_str, None) {
                     t_unit_type = found_unit_type;
                     t_unit = unit;
                 } else {
@@ -142,24 +142,12 @@ fn main() {
 
                 // process each value-unit pair
                 let mut total_value_in_target_unit = IndexMap::<&'static str, f64>::new();
-                let mut unit_type: Option<&'static str> = None;
-                let mut all_units_valid = true;
-                let mut invalid_units: Vec<String> = Vec::new();
+                let mut all_units_match = true;
+                let mut mismatched_units: Vec<String> = Vec::new();
 
                 for pair in value_unit_pairs.iter() {
                     if let Some((value, unit_str)) = parse_value_unit(pair) {
-                        if let Some((found_unit_type, unit)) = find_unit(&unit_str) {
-                            if unit_type.is_none() {
-                                unit_type = Some(found_unit_type);
-                            } else if unit_type.unwrap() != found_unit_type {
-                                println!(
-                                    "[ Unit type mismatch: mixed '{}' with '{}' ]",
-                                    unit_type.unwrap(),
-                                    found_unit_type
-                                );
-                                all_units_valid = false;
-                                break;
-                            }
+                        if let Some((_, unit)) = find_unit(&unit_str, Some(t_unit_type)) {
                             if t_unit.formula.is_none() {
                                 if let Some(ratios) = &unit.ratios {
                                     for (source_unit_type, ratio) in ratios {
@@ -173,8 +161,8 @@ fn main() {
                                 }
                             }
                         } else {
-                            all_units_valid = false;
-                            invalid_units.push(unit_str);
+                            all_units_match = false;
+                            mismatched_units.push(unit_str.to_string());
                         }
                     } else {
                         usage();
@@ -182,9 +170,12 @@ fn main() {
                     }
                 }
 
-                if !all_units_valid {
-                    for unit in invalid_units {
-                        unknown_unit(&unit);
+                if !all_units_match {
+                    for unit in mismatched_units {
+                        println!(
+                            "[ Unit '{}' not found in type '{}' ]",
+                            unit, t_unit_type
+                        );
                     }
                     return;
                 }
@@ -197,7 +188,7 @@ fn main() {
                 // collect values by unit type and keep track of the first ratio value
                 for pair in value_unit_pairs.iter() {
                     if let Some((value, unit_str)) = parse_value_unit(&pair) {
-                        if let Some((_, unit)) = find_unit(&unit_str) {
+                        if let Some((_, unit)) = find_unit(&unit_str, Some(t_unit_type)) {
                             // get the first ratio value for sorting
                             let first_ratio_value = unit
                                 .ratios
@@ -246,6 +237,7 @@ fn main() {
                                 "",
                             )
                             .trim(),
+                        Some(t_unit_type)
                     ) {
                         let source_value = parse_value_unit(&value_unit_pairs[0]).unwrap().0;
                         match formula(source_unit, source_value) {

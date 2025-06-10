@@ -41,30 +41,35 @@ pub fn parse_value_unit(value_unit_str: &str) -> Option<(f64, String)> {
 }
 
 // find a unit in the UNITS collection and return its type and ratio
-pub fn find_unit(unit_str: &str) -> Option<(&'static str, &Unit)> {
-    for unit_type in UNITS.iter() {
+pub fn find_unit(unit_str: &str, unit_type: Option<&str>) -> Option<(&'static str, &'static Unit)> {
+    for u_type in UNITS.iter() {
+        if let Some(ut) = unit_type {
+            if !u_type.0.eq_ignore_ascii_case(ut) {
+                continue;
+            }
+        }
         // ============================================================
         // separate full UNITS enum iteration is needed here
         // to prioritize case-sensitive matching
         // (e.g. to recognize "B" as bytes and "b" as bits)
         // ============================================================
-        for unit in unit_type.1.iter() {
+        for unit in u_type.1.iter() {
             // check exact match
             if unit.abbr == unit_str {
-                return Some((unit_type.0, unit));
+                return Some((u_type.0, unit));
             }
         }
         // ============================================================
         let unit_lc = unit_str.to_lowercase();
-        for unit in unit_type.1.iter() {
+        for unit in u_type.1.iter() {
             // check case-insensitive match
             if unit.abbr.to_lowercase() == unit_lc {
-                return Some((unit_type.0, unit));
+                return Some((u_type.0, unit));
             }
             // check aliases
             for alias in unit.aliases {
                 if alias.to_lowercase() == unit_lc {
-                    return Some((unit_type.0, unit));
+                    return Some((u_type.0, unit));
                 }
             }
         }

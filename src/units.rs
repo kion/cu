@@ -856,10 +856,7 @@ lazy_static! {
                     aliases: &[
                         "floz",
                         "fluid ounce",
-                        "fluid ounces",
-                        "oz",
-                        "ounce",
-                        "ounces"
+                        "fluid ounces"
                     ],
                     ratios: Some(vec![("Imperial", 2.8413e-5), ("US", 2.9574e-5)]),
                     formula: None,

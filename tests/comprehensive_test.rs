@@ -66,6 +66,28 @@ fn run_tests(test_cases: Vec<TestCase>) {
 }
 
 #[test]
+fn test_unit_conversion() {
+    let test_cases = vec![
+        TestCase {
+            input: "12floz = ml",
+            expected_output: "\
+            [VOLUME] 12 fl oz (Imperial) = 340.96 ml\n\
+            [VOLUME] 12 fl oz (US) = 354.89 ml",
+            description: "Fluid ounces to milliliters",
+        },
+        TestCase {
+            input: "200ml to floz",
+            expected_output: "\
+            [VOLUME] 200 ml = 7.04 fl oz (Imperial)\n\
+            [VOLUME] 200 ml = 6.76 fl oz (US)",
+            description: "Milliliters to fluid ounces",
+        },
+    ];
+
+    run_tests(test_cases);
+}
+
+#[test]
 fn test_complex_length_units() {
     let test_cases = vec![
         // multiple unit types in different orders
@@ -222,17 +244,19 @@ fn test_edge_cases_and_errors() {
             expected_output: "[LENGTH] 9999 mi 9999 yd 9999 ft 9999 in = 16104.24 km",
             description: "Very large mixed numbers",
         },
-        // different unit types
-        TestCase {
-            input: "5ft 10kg 20W = m",
-            expected_output: "[ Unit type mismatch: mixed 'LENGTH' with 'MASS' ]",
-            description: "Mixing different unit types (length and weight)",
-        },
-        // unknown units
+        // mismatched unit type
         TestCase {
             input: "5ft 10parsecs = m",
-            expected_output: "[ Unknown unit: parsecs ]",
+            expected_output: "[ Unit 'parsecs' not found in type 'LENGTH' ]",
             description: "Using an unknown unit",
+        },
+        // multiple mismatched unit types
+        TestCase {
+            input: "5ft 10kg 20W = m",
+            expected_output: "\
+            [ Unit 'kg' not found in type 'LENGTH' ]\n\
+            [ Unit 'W' not found in type 'LENGTH' ]",
+            description: "Mixing different unit types (length and weight)",
         },
     ];
 

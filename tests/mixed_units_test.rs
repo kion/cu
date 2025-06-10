@@ -155,7 +155,7 @@ fn test_failure_cases() {
         // mixed unit types
         TestCase {
             input: "5ft 10kg = m",
-            expected_output: "[ Unit type mismatch: mixed 'LENGTH' with 'MASS' ]",
+            expected_output: "[ Unit 'kg' not found in type 'LENGTH' ]",
         },
         // unknown target unit
         TestCase {
@@ -166,8 +166,8 @@ fn test_failure_cases() {
         TestCase {
             input: "5ft 10abc 20xyz = m",
             expected_output: "\
-            [ Unknown unit: abc ]\n\
-            [ Unknown unit: xyz ]",
+            [ Unit 'abc' not found in type 'LENGTH' ]\n\
+            [ Unit 'xyz' not found in type 'LENGTH' ]",
         },
     ];
 

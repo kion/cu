@@ -91,60 +91,60 @@ mod utils_test {
     #[test]
     fn test_find_unit() {
         // test valid unit with exact match
-        let result = find_unit("m");
+        let result = find_unit("m", None);
         assert!(result.is_some());
         let (unit_type, unit) = result.unwrap();
         assert_eq!(unit_type, "LENGTH");
         assert_eq!(unit.name, "Meter");
 
         // test potentially conflicting unit abbreviations via case-sensitive match - #1
-        let result = find_unit("B");
+        let result = find_unit("B", None);
         assert!(result.is_some());
         let (unit_type, unit) = result.unwrap();
         assert_eq!(unit_type, "DIGITAL STORAGE");
         assert_eq!(unit.name, "Byte");
 
         // test potentially conflicting unit abbreviations via case-sensitive match - #2
-        let result = find_unit("b");
+        let result = find_unit("b", None);
         assert!(result.is_some());
         let (unit_type, unit) = result.unwrap();
         assert_eq!(unit_type, "DIGITAL STORAGE");
         assert_eq!(unit.name, "Bit");
 
         // test valid unit with case-insensitive match
-        let result = find_unit("KM");
+        let result = find_unit("KM", None);
         assert!(result.is_some());
         let (unit_type, unit) = result.unwrap();
         assert_eq!(unit_type, "LENGTH");
         assert_eq!(unit.name, "Kilometer");
 
         // test valid unit with short alias
-        let result = find_unit("m2");
+        let result = find_unit("m2", None);
         assert!(result.is_some());
         let (unit_type, unit) = result.unwrap();
         assert_eq!(unit_type, "AREA");
         assert_eq!(unit.abbr, "m²");
 
         // test valid unit with long alias
-        let result = find_unit("square meter");
+        let result = find_unit("square meter", None);
         assert!(result.is_some());
         let (unit_type, unit) = result.unwrap();
         assert_eq!(unit_type, "AREA");
         assert_eq!(unit.abbr, "m²");
 
         // test unit with special characters
-        let result = find_unit("°C");
+        let result = find_unit("°C", None);
         assert!(result.is_some());
         let (unit_type, unit) = result.unwrap();
         assert_eq!(unit_type, "TEMPERATURE");
         assert_eq!(unit.name, "Celsius");
 
         // test invalid unit
-        let result = find_unit("invalid_unit");
+        let result = find_unit("invalid_unit", None);
         assert!(result.is_none());
 
         // test empty string
-        let result = find_unit("");
+        let result = find_unit("", None);
         assert!(result.is_none());
     }
 }
